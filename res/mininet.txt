@@ -1,0 +1,7 @@
+return {
+       "2 inputs 1 logistic",
+        matrix.fromString[[4
+        ascii
+        -30 20
+ 20
+]]
