@@ -1,19 +1,18 @@
-﻿using System;
+﻿
+using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
+
 namespace ANN
 {
     public class Connections : IAction
     {
-
         public Layer source, dest;
 
-        //Size of the matrix
+        // Size of the matrix
         protected int n1, n2;
 
-        //Weight matrix
+        // Weight matrix
         public double[,] weights;
 
         /// <summary>
@@ -25,38 +24,33 @@ namespace ANN
         {
             this.n1 = n1;
             this.n2 = n2;
-
-            this.weights = new double[n2,n1];
+            this.weights = new double[n2, n1];
             this.source = null;
             this.dest = null;
         }
 
         /// <summary>
-        /// Gets two layers and generate the all_to_all weigth matrix
+        /// Gets two layers and generate the all_to_all weight matrix
         /// </summary>
         /// <param name="input">The source layer</param>
-        /// <param name="output">The otuput layer</param>
+        /// <param name="output">The output layer</param>
         public Connections(Layer input, Layer output)
         {
-
-            // Una neurona más por el bias
-            this.n1 = input.nNeurons+1;
+            // One more neuron for the bias
+            this.n1 = input.nNeurons + 1;
             this.n2 = output.nNeurons;
-
             this.weights = new double[n2, n1];
             this.source = input;
             this.dest = output;
-
         }
 
         /// <summary>
-        /// Returns the number of neurons the input layer
+        /// Returns the number of neurons in the input layer
         /// </summary>
         /// <returns></returns>
         int IAction.getNInputNeurons()
         {
-
-            return n1-1;
+            return n1 - 1;
 
         }
 
@@ -83,7 +77,7 @@ namespace ANN
             {
                 for (int j = 0; j < this.n2; ++j)
                 {
-                    this.weights[i,j] = min_weight + (rnd.NextDouble()/(max_weight-min_weight));
+                    this.weights[i, j] = min_weight + (rnd.NextDouble() / (max_weight - min_weight));
                 }
 
             }
@@ -95,7 +89,7 @@ namespace ANN
         /// <param name="file">Corrected opened stream</param>
         public void readWeightsfromStream(StreamReader file)
         {
-            
+
 
             for (int i = 0; i < this.n2; i++)
             {
@@ -104,26 +98,28 @@ namespace ANN
                 {
 
                     char aux;
-                    string sWeight="";
-                    do{
+                    string sWeight = "";
+                    do
+                    {
 
-                       aux = (char)file.Read();
+                        aux = (char)file.Read();
 
-                    }while(!char.IsLetterOrDigit(aux) && aux != '-' && aux != '.');
+                    } while (!char.IsLetterOrDigit(aux) && aux != '-' && aux != '.');
 
                     sWeight += aux;
-                    do{
+                    do
+                    {
                         aux = (char)file.Read();
                         sWeight += aux;
 
                     } while (char.IsLetterOrDigit(aux) || aux == '-' || aux == '.');
 
-                    this.weights[i,j] = double.Parse(sWeight.Replace('.',','));
+                    this.weights[i, j] = double.Parse(sWeight.Replace('.', ','));
                 }
 
 
             }
-            
+
             // while ((line = file.ReadLine()) != null)
             //{
 
@@ -133,11 +129,11 @@ namespace ANN
             //    int i = 0;               
             //    foreach (string aux in line.Split())
             //    {
-                    
+
             //        v[i++] = Double.Parse(aux);
 
             //    };
-                
+
 
 
         }
@@ -148,14 +144,14 @@ namespace ANN
 
             s = "";
 
-            
+
             for (int i = 0; i < this.n1; i++)
             {
 
                 for (int j = 0; j < this.n2; j++)
                 {
-                    s += this.weights[i,j];
-                    
+                    s += this.weights[i, j];
+
                 }
                 s += "\n";
 
@@ -174,10 +170,10 @@ namespace ANN
             for (int i = 0; i < this.n2; i++)
             {
                 //Add bias
-                this.dest.weights[i] = this.weights[i,0];
+                this.dest.weights[i] = this.weights[i, 0];
                 for (int j = 1; j < this.n1; j++)
                 {
-                    this.dest.weights[i] += this.source.weights[j-1] * this.weights[i,j];
+                    this.dest.weights[i] += this.source.weights[j - 1] * this.weights[i, j];
 
 
                 }

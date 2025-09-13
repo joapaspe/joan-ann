@@ -1,26 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.IO;
-using Microsoft.Win32;
-using System.Windows;
-using System.Windows.Forms;
-
 
 namespace ANN
 {
     public class Network : IAction
     {
-
         public Layer input, output;
         public List<IAction> actionList;
-        //public List<Connections> connections;
+        // public List<Connections> connections;
 
         /// <summary>
-        /// Creates a empty network
+        /// Creates an empty network
         /// </summary>
-        public Network(){
+        public Network()
+        {
             actionList = new List<IAction>();
             input = output = null;
         }
@@ -29,31 +23,27 @@ namespace ANN
         /// Load a net from a file
         /// </summary>
         /// <param name="file">File Network route</param>
-        public Network(string file): this()
+        public Network(string file) : this()
         {
-
-            StreamReader reader = null;
-            reader = new StreamReader(file);
-
-            this.readfromFile(reader);
-            
+            using (StreamReader reader = new StreamReader(file))
+            {
+                this.readfromFile(reader);
+            }
         }
 
         public Network(Network n)
         {
-            
             this.actionList = new List<IAction>();
-            foreach(IAction ac in n.actionList){
+            foreach (IAction ac in n.actionList)
+            {
                 if (ac.GetType() == typeof(Layer))
                 {
                     Layer acLayer = (Layer)ac;
                     Layer aux = new Layer(acLayer);
                     this.actionList.Add(aux);
-
                     if (acLayer == n.input)
                     {
                         this.input = aux;
-
                     }
                     else if (acLayer == n.output)
                     {

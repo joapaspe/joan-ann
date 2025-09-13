@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
 
 public enum ActivationFunction
 {
@@ -111,26 +107,17 @@ namespace ANN
 
             switch (name)
             {
-
                 case "input":
                     return ActivationFunction.IDENTITY;
-
-                    break;
-
                 case "softmax":
                     return ActivationFunction.SOFTMAX;
-                    break;
-
                 case "tanh":
                     return ActivationFunction.TANH;
-                    break;
-
-                case "output":case "logistic":
+                case "output":
+                case "logistic":
                     return ActivationFunction.LOGISTIC;
-                    break;
                 default:
                     return ActivationFunction.IDENTITY;
-
             }
 
         }
